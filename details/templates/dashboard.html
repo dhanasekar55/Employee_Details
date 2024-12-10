@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin: 20px 0;
+            color: #fff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Buttons Styles */
+        .buttons-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        a.add-company, a.btn-success {
+            display: block;
+            padding: 12px 24px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        a.add-company:hover, a.btn-success:hover {
+            background-color: #45a049;
+            transform: translateY(-3px);
+        }
+
+        /* Company Cards Container */
+        .company-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+            width: 100%;
+            max-width: 1200px;
+            box-sizing: border-box;
+            margin-top: 50px;
+        }
+
+        /* Individual Company Card */
+        .company-card {
+            background-color: #fff;
+            color: #333;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .company-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .company-name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #4CAF50;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Action Buttons (View, Edit, Delete) */
+        .action-links {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        .action-links a {
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 0.85rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .action-links a.edit {
+            background-color: #ffa500;
+        }
+
+        .action-links a.delete {
+            background-color: #f44336;
+        }
+
+        .action-links a:hover {
+            background-color: #333;
+        }
+
+        /* Media Queries for Mobile Devices */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                margin-top: 0;
+            }
+
+            .buttons-container {
+                flex-direction: column;
+                align-items: center;
+                margin-top: 20px;
+            }
+
+            a.add-company, a.btn-success {
+                width: 80%;
+                font-size: 1rem;
+                padding: 10px 20px;
+            }
+
+            .company-list {
+                padding: 0 10px;
+            }
+
+            .company-card {
+                padding: 15px;
+            }
+
+            .company-card a {
+                font-size: 1rem;
+                padding: 12px;
+            }
+
+            .action-links {
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+            }
+
+            .action-links a {
+                font-size: 1rem;
+                padding: 10px;
+                width: auto;
+            }
+        }
+
+        /* Mobile Portrait */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            a.add-company, a.btn-success {
+                font-size: 0.9rem;
+                padding: 8px 16px;
+            }
+
+            .company-card a {
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sathish Handlooms Pvt Ltd</h1>
+
+    <!-- Add Company and Add Employee Buttons -->
+    <div class="buttons-container">
+        <a href="{% url 'add_company' %}" class="add-company">Add Company</a>
+        <a href="{% url 'add_employee' %}" class="btn-success">Add Employee</a>
+        <a href="{% url 'homepage' %}" class="btn-success">All Employees</a>
+    </div>
+
+    <!-- Company List (cards) -->
+    <div class="company-list">
+        {% for company in companies %}
+        <div class="company-card">
+            <!-- Company Name (Clickable) -->
+            <a href="{% url 'company_employees' company.id %}" class="company-name">{{ company.name }}</a>
+            
+            <!-- Action Buttons (Edit, Delete) -->
+            <div class="action-links">
+                <!-- Edit Button -->
+                <a href="{% url 'edit_company' company.id %}" class="edit">Edit</a>
+                
+                <!-- Delete Button -->
+                <a href="{% url 'delete_company' company.id %}" class="delete" onclick="return confirm('Are you sure you want to delete this company?')">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+</html>

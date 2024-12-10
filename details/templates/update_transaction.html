@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Transaction</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 50px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #ff6347;
+            border-color: #ff6347;
+        }
+        .btn-secondary {
+            background-color: #32cd32;
+            border-color: #32cd32;
+        }
+        .btn-primary:hover, .btn-secondary:hover {
+            opacity: 0.8;
+        }
+        .btn {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin-top: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Update Transaction for {{ transaction.product_name }}</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <!-- Quantity Field -->
+        <div class="mb-3">
+            <label for="id_quantity" class="form-label">Quantity</label>
+            <div class="input-group">
+                <button type="button" class="btn btn-secondary" onclick="adjustField('quantity', -1)">-</button>
+                <input type="number" id="id_quantity" name="quantity" class="form-control" value="{{ form.quantity.value }}" min="0" readonly>
+                <input type="number" id="quantity_adjust_input" class="form-control" placeholder="Enter adjustment" min="0">
+                <button type="button" class="btn btn-secondary" onclick="adjustField('quantity', 1)">+</button>
+            </div>
+        </div>
+
+        <!-- Paid Field -->
+        <div class="mb-3">
+            <label for="id_paid" class="form-label">Paid</label>
+            <div class="input-group">
+                <button type="button" class="btn btn-secondary" onclick="adjustField('paid', -1)">-</button>
+                <input type="number" id="id_paid" name="paid" class="form-control" value="{{ form.paid.value }}" min="0" readonly>
+                <input type="number" id="paid_adjust_input" class="form-control" placeholder="Enter adjustment" min="0">
+                <button type="button" class="btn btn-secondary" onclick="adjustField('paid', 1)">+</button>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Transaction</button>
+    </form>
+
+    <a href="{% url 'employee_detail' transaction.employee.id %}" class="btn btn-secondary mt-3">Back to Employee Details</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+
+<script>
+    function adjustField(field, direction) {
+        const fieldInput = document.getElementById(`id_${field}`);
+        const adjustmentInput = document.getElementById(`${field}_adjust_input`);
+        let currentValue = parseInt(fieldInput.value) || 0;
+        let adjustmentValue = parseInt(adjustmentInput.value) || 0;
+
+        currentValue += direction * adjustmentValue;
+
+        // Ensure the value does not go negative
+        if (currentValue < 0) {
+            currentValue = 0;
+        }
+
+        fieldInput.value = currentValue;
+        adjustmentInput.value = '';  // Reset adjustment input
+    }
+</script>
+
+</body>
+</html>

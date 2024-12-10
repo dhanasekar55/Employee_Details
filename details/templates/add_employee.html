@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Employee</title>
+
+    <!-- Link to Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS for Colorful Background, Card, and Font Colors -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #6a11cb, #2575fc); /* Colorful gradient background */
+            color: #fff; /* White text color */
+            font-family: 'Arial', sans-serif; /* Clean and modern font */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            margin: 0;
+        }
+        
+        h1 {
+            text-align: center;
+            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.5); /* Subtle shadow for readability */
+            margin-bottom: 20px;
+            font-size: 36px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 600px;
+            background: linear-gradient(135deg, #ff4081, #ff9800); /* Colorful gradient background for form */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            margin-top: 50px;
+            color: #fff; /* White text color inside the form */
+        }
+
+        .btn-primary {
+            background-color: #ff4081; /* Vibrant pink for submit button */
+            border-color: #ff4081;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #f50057; /* Darker pink on hover */
+            border-color: #f50057;
+        }
+
+        .btn-secondary {
+            background-color: #ff9800; /* Vibrant orange for back button */
+            border-color: #ff9800;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background-color: #fb8c00; /* Darker orange on hover */
+            border-color: #fb8c00;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus {
+            border-color: #ff4081; /* Pink border on focus */
+            box-shadow: 0 0 5px rgba(255, 64, 129, 0.5); /* Subtle pink glow on focus */
+        }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 28px; /* Smaller header on mobile */
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            .form-control {
+                font-size: 14px;
+                padding: 8px;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%; /* Full width buttons on mobile */
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1> Add Employee </h1>
+    
+    <!-- Form to Add Employee -->
+    <form method="POST">
+        {% csrf_token %}
+        <!-- Render the form fields -->
+        {{ form.as_p }}
+    
+        <!-- Hidden field to include company_id -->
+        <input type="hidden" name="company_id" value="{{ company_id }}">
+    
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary w-100">Save Employee</button>
+    </form>
+
+    {% if company_id %}
+    <a href="{% url 'company_employees' company_id=company_id %}" class="btn btn-secondary mt-3 w-100">Back to Employees</a>
+    {% else %}
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary mt-3 w-100">Back to Dashboard</a>
+    {% endif %}
+
+
+
+</div>
+
+<!-- Link to Bootstrap JS (Optional for interactivity) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

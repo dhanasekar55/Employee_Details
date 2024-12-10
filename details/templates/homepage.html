@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions Overview</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        /* Body Background with Gradient */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(45deg, #ff9a8b, #fad0c4);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            padding: 0;
+            margin: 0;
+        }
+
+        /* Add Animation to the Background Gradient */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #FF5722; /* Vibrant Orange */
+            font-family: 'Verdana', sans-serif;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        td a{
+            text-decoration:none;
+            Color:Red;
+        }
+
+        .btn-warning {
+            background-color: #FF9800;
+            border: none;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background-color: #e68900;
+        }
+
+        /* Table Styles */
+        #transactionsTable {
+            width: 100%;
+            border-radius: 10px;
+            border-collapse: collapse;
+            overflow: hidden;
+        }
+
+        /* Table Header Color */
+        thead {
+            background-color: #009688; /* Teal header */
+            color: white;
+        }
+
+        th {
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        td {
+            text-align: center;
+            padding: 12px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease-in-out;
+            
+        }
+
+        /* Add Alternating Row Colors */
+        tr:nth-child(even) {
+            background-color: #ffe0f0; /* Light Pink */
+        }
+
+        tr:nth-child(odd) {
+            background-color: #f3e5f5; /* Light Lavender */
+        }
+
+        /* Row Hover Effect */
+        tr:hover {
+            background-color: #ffeb3b; /* Bright Yellow */
+        }
+
+        /* Table Cell Hover Effect */
+        td:hover {
+            background-color: #00bcd4; /* Cyan */
+            color: white; /* White text on hover */
+            cursor: pointer;
+        }
+
+        /* Table Responsive for Mobile */
+        .table-responsive {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        /* Search Bar Styling */
+        #searchBar {
+            font-size: 16px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+    </style>
+    <script>
+        function filterTable() {
+            const input = document.getElementById("searchBar");
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("transactionsTable");
+            const rows = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+                const cells = rows[i].getElementsByTagName("td");
+                let rowMatch = false;
+
+                for (let j = 0; j < cells.length; j++) {
+                    const cell = cells[j];
+                    if (cell) {
+                        const text = cell.textContent || cell.innerText;
+                        if (text.toLowerCase().includes(filter)) {
+                            rowMatch = true;
+                            break;
+                        }
+                    }
+                }
+                rows[i].style.display = rowMatch ? "" : "none"; // Show or hide rows
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Employee Transactions</h1>
+        <a href="{% url 'dashboard' %}" class="btn btn-warning mb-3">Back</a>
+
+        <!-- Search Bar -->
+        <div class="mb-3">
+            <input 
+                type="text" 
+                id="searchBar" 
+                class="form-control" 
+                placeholder="Search by any field..." 
+                onkeyup="filterTable()">
+        </div>
+
+        <!-- Responsive Table -->
+        <div class="table-responsive">
+            <table id="transactionsTable" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Company Name</th>
+                        <th>Total Quantity</th>
+                        <th>Total Paid</th>
+                        <th>Total Advance</th>
+                        <th>Total Amount</th>
+                        <th>Total Balance</th>
+                        <th>Total Additional Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee_data in context %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'employee_detail' id=employee_data.employee.id %}">
+                                {{ employee_data.employee.name }}
+                            </a>
+                        </td>
+                        <td>{{ employee_data.company.name }}</td>
+                        <td>{{ employee_data.total_quantity }}</td>
+                        <td>{{ employee_data.total_paid }}</td>
+                        <td>{{ employee_data.total_advance }}</td>
+                        <td>{{ employee_data.total_amount }}</td>
+                        <td>{{ employee_data.total_balance }}</td>
+                        <td>{{ employee_data.total_additional_quantity }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+</body>
+</html>
